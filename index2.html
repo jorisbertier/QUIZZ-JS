@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style2.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <form>
+            <div class="form-group d-flex flex-row">
+                <input type="text" class="form-control w-25" aria-describedby="emailHelp" placeholder="Ajouter une tache"><br>
+                <button type="button" class="btn btn-dark add">Ajouter</button>
+            </div><br>
+
+            <div class="form-group">
+                <div>Filtrer par :
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>Toutes</option>
+                        <option>Terminées</option>
+                        <option>Actives</option>
+                    </select>
+                </div>
+            </div><br>
+        </form>
+ 
+
+        <div id="taskList"></div>
+
+
+        <script>
+            let finish = document.querySelectorAll('.finish');
+            let petrols = document.querySelectorAll('.petrol');
+            let add = document.querySelector('.btn.add');
+
+            finish.forEach((finish, index) => {
+                let petrol = petrols[index];
+
+                finish.addEventListener('click', function() {
+                    if(finish.innerHTML == 'Terminé') {
+                        petrol.style.textDecoration = 'line-through';
+                        finish.innerHTML = 'Annuler';
+                    } else if (finish.innerHTML == 'Annuler') {
+                        petrol.style.textDecoration = 'none';
+                        finish.innerHTML = 'Terminé';
+                    }
+                });
+            });
+
+            const array = [];
+
+            add.addEventListener('click', function() {
+            const input = document.querySelector('.form-control.w-25');
+            const taskText = input.value.trim();
+
+            if (taskText !== '') {
+                const taskContainer = document.createElement('div');
+                taskContainer.classList.add('form-group', 'd-flex', 'flex-row');
+                
+                const taskLabel = document.createElement('div');
+                taskLabel.classList.add('petrol');
+                taskLabel.textContent = taskText;
+                
+                const cancelButton = document.createElement('button');
+                cancelButton.classList.add('btn', 'btn-dark', 'mx-5', 'cancel');
+                cancelButton.textContent = 'Supprimer';
+                
+                const completeButton = document.createElement('button');
+                completeButton.classList.add('btn', 'btn-dark', 'mx-5', 'finish');
+                completeButton.textContent = 'Terminer';
+                
+                taskContainer.appendChild(taskLabel);
+                taskContainer.appendChild(cancelButton);
+                taskContainer.appendChild(completeButton);
+                
+                document.querySelector('#taskList').appendChild(taskContainer);
+                input.value = '';
+                
+                cancelButton.addEventListener('click', function() {
+                    taskContainer.remove();
+                });
+                
+                completeButton.addEventListener('click', function() {
+                    if (completeButton.innerHTML == 'Terminer') {
+                        taskLabel.style.textDecoration = 'line-through';
+                        completeButton.innerHTML = 'Supprimer';
+                    } else if (completeButton.innerHTML == 'Supprimer') {
+                        taskLabel.style.textDecoration = 'none';
+                        completeButton.innerHTML = 'Terminer';
+                    }
+                });
+            }
+});
+
+const deleteButton = document.querySelector('.btn.mx-5');
+
+deleteButton.addEventListener('click', function() {
+    const taskContainers = document.querySelectorAll('.form-group.d-flex.flex-row');
+    taskContainers.forEach(taskContainer => {
+        const completeButton = taskContainer.querySelector('.btn.finish');
+        if (completeButton.innerHTML === 'Supprimer') {
+            taskContainer.remove();
+        }
+    });
+});
+        </script>
+    </body>
+</html>
